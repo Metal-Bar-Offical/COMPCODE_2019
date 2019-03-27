@@ -55,11 +55,11 @@ void Robot::RobotInit() {
        talon_left_enc = new TalonSRX(2);
        talon_right_noenc = new TalonSRX(3);
        talon_right_enc = new TalonSRX(4);
-       claw_pivot_talon_enc = new TalonSRX(5);
+       claw_pivot_talon_enc = new TalonSRX(9);
        climber_talon_arm = new TalonSRX(6);
        climber_talon_wheel = new TalonSRX(7);
        talon_elevator_enc = new TalonSRX(8);
-       talon_wheels = new TalonSRX(9);
+       talon_wheels = new TalonSRX(5);
        talon_clamp = new TalonSRX(10);
 
        talon_left_noenc->Set(ControlMode::Follower, 2);
@@ -107,7 +107,7 @@ void Robot::RobotInit() {
        talon_clamp->ConfigPeakOutputForward(1, 10);
        talon_clamp->ConfigPeakOutputReverse(-1, 10);
 
-       light = new Solenoid(0);
+       light = new Solenoid(1);
 
       	navx = new AHRS(SPI::Port::kMXP);
 
@@ -143,10 +143,10 @@ void Robot::AutonomousPeriodic() {
        
        //intake_wheels->update();
       // intake_clamp->update();
-         //claw_pivot_talon_enc->Set(ControlMode::PercentOutput, joy1->GetRawAxis(5));
+         claw_pivot_talon_enc->Set(ControlMode::PercentOutput, joy1->GetRawAxis(5));
   
 
-       intake_pivot->run_intake_pivot(0, -175, -650, -1800, -1000);
+       //intake_pivot->run_intake_pivot(0, -175, -650, -1800, -1000);
  
        elevator->run_elevator(-9500,-22750, -27500 );
 
@@ -200,21 +200,17 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() {
 	light->Set(1);
    drivebase->update();
-     climber->run_climber(.75); 
+     //climber->run_climber(.75); 
        
-       intake_wheels->update();
-       intake_clamp->update();
-         //claw_pivot_talon_enc->Set(ControlMode::PercentOutput, joy1->GetRawAxis(5));
+       //intake_wheels->update();
+      // intake_clamp->update();
+         claw_pivot_talon_enc->Set(ControlMode::PercentOutput, joy1->GetRawAxis(5));
   
 
-       intake_pivot->run_intake_pivot(0, -175, -650, -1350, -1000);
+       //intake_pivot->run_intake_pivot(0, -175, -650, -1350, -1000);
  
        elevator->run_elevator(-9500,-22750, -27500 );
-       std::cout<<"/RightPos"<<talon_right_enc->GetSelectedSensorPosition(0)<<std::endl;
-       std::cout<<"/LeftPos"<<talon_left_enc->GetSelectedSensorPosition(0)<<std::endl;
-       std::cout<<"AmperageR: "<<talon_right_enc->GetOutputCurrent()<<std::endl;
-       std::cout<<"/AmperageL: "<<talon_left_enc->GetOutputCurrent()<<std::endl;
-       std::cout<<"Pivot Counts: "<<claw_pivot_talon_enc->GetSelectedSensorPosition(0)<<std::endl;
+       
        
        
 

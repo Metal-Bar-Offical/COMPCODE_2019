@@ -27,17 +27,27 @@ void Climber::run_climber (double max_speed){
 
 	servo_toggle();
 //sets a button to write to ClimberWheel
-climber_talon_wheel->Set(ControlMode::PercentOutput, -1* max_speed*joy0->GetRawButton(5));
+climber_talon_wheel->Set(ControlMode::PercentOutput, max_speed*joy0->GetRawButton(5));
 //lowers and brings up the climberArm
-if (joy0->GetRawButton(3)==1){
-	climber_talon_arm->Set(ControlMode::PercentOutput, max_speed * 1);
+if (climber_talon_arm->GetSelectedSensorPosition(0)<-1275){
+	climber_talon_arm->Set(ControlMode::PercentOutput, joy0->GetRawButton(1));
 }
-else if (joy0->GetRawButton(4)==1){
-	climber_talon_arm->Set(ControlMode::PercentOutput, max_speed*-1);
+else if (joy0->GetRawButton(1)==1){
+	climber_talon_arm->Set(ControlMode::PercentOutput, 1 );
 }
-//shuts down talon
+else if (joy0->GetRawButton(2)==1){
+	climber_talon_arm->Set(ControlMode::PercentOutput, -1 );
+}
 else {
 	climber_talon_arm->Set(ControlMode::PercentOutput, 0);
+}
+
+
+
+
+
+if (mag_switch_climber->Get()==0){
+climber_talon_arm->SetSelectedSensorPosition(0,0,10);
 }
 //MAG switch hard stop
 if (mag_switch_climber->Get() == 0 and !mag_switch_cancel){
